@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raoof for Dean — Safeguarding Standards in Uncertain Times</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+
+  :root {
+    --gd:   #0f4f26;
+    --g:    #1a7a3c;
+    --gl:   #2da653;
+    --gp:   #d4edda;
+    --gm:   #7dda9a;
+    --gs:   #f0faf4;
+    --w:    #ffffff;
+    --off:  #f8fdf9;
+    --txt:  #1c1c1c;
+    --mid:  #2d3d33;
+    --d2:   #2a6b40;
+    --d3:   #1a4a2e;
+    --d4:   #a8d5b5;
+    --d5:   #1a5c30;
+    --d7:   #0a2018;
+    --d8:   #6aaa80;
+    --amb:  #e67e22;
+    --yel:  #fff8e1;
+    --yd:   #5c3d00;
+    --red:  #c0392b;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family:'Source Sans 3',sans-serif;
+    font-size:18px;
+    line-height:1.75;
+    color:var(--txt);
+    background:var(--w);
+    overflow-x:hidden;
+  }
+
+  /* Progress */
+  #prog {
+    position:fixed; top:0; left:0; height:4px;
+    background:linear-gradient(90deg,var(--g),var(--gm));
+    z-index:200; transition:width .1s linear;
+  }
+
+  /* Nav dots */
+  #ndots {
+    position:fixed; right:1.2rem; top:50%;
+    transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:.55rem;
+    z-index:199;
+  }
+  .nd {
+    width:9px; height:9px; border-radius:50%;
+    background:rgba(26,122,60,.2); cursor:pointer;
+    transition:background .3s,transform .3s;
+  }
+  .nd.on { background:var(--g); transform:scale(1.55); }
+
+  /* Reveal */
+  .rev { opacity:0; transform:translateY(28px); transition:opacity .7s ease,transform .7s ease; }
+  .rev.in { opacity:1; transform:none; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height:100vh;
+    background:var(--gd);
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center; padding:3rem 2rem;
+    position:relative; overflow:hidden;
+  }
+  #hero::before {
+    content:''; position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse at 25% 75%,rgba(26,122,60,.35) 0%,transparent 55%),
+      radial-gradient(ellipse at 75% 25%,rgba(45,166,83,.15) 0%,transparent 50%);
+    pointer-events:none;
+  }
+  /* Subtle grid */
+  #hero::after {
+    content:''; position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(0deg,transparent,transparent 48px,rgba(255,255,255,.025) 48px,rgba(255,255,255,.025) 49px),
+      repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(255,255,255,.025) 48px,rgba(255,255,255,.025) 49px);
+    pointer-events:none;
+  }
+
+  .hero-chip {
+    position:relative; z-index:1;
+    display:inline-block;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:4px;
+    padding:.35rem 1rem;
+    font-size:.8rem; letter-spacing:.12em; text-transform:uppercase;
+    color:rgba(255,255,255,.75);
+    margin-bottom:2rem;
+    animation:fd .7s ease both;
+  }
+
+  #hero h1 {
+    position:relative; z-index:1;
+    font-family:'Merriweather',serif;
+    font-size:clamp(2rem,5.5vw,4rem);
+    font-weight:700; color:var(--w); line-height:1.2;
+    max-width:760px; margin-bottom:1.4rem;
+    animation:fu .7s ease .15s both;
+  }
+  #hero h1 em { font-style:italic; color:var(--gm); }
+
+  .hero-strap {
+    position:relative; z-index:1;
+    font-size:1.1rem; color:rgba(255,255,255,.65);
+    max-width:580px; line-height:1.85; margin-bottom:2.2rem;
+    animation:fu .7s ease .3s both;
+  }
+
+  .hero-byline {
+    position:relative; z-index:1;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:8px; padding:.8rem 1.6rem;
+    animation:fu .7s ease .45s both;
+  }
+  .hb-name { font-weight:700; color:var(--w); font-size:1.05rem; }
+  .hb-role { font-size:.875rem; color:rgba(255,255,255,.55); margin-top:.15rem; }
+
+  .scroll-cue {
+    position:absolute; bottom:2rem; left:50%;
+    transform:translateX(-50%);
+    color:rgba(255,255,255,.35); font-size:.75rem;
+    letter-spacing:.14em; text-transform:uppercase;
+    animation:bob 2.2s ease infinite; z-index:1;
+  }
+  .scroll-cue::after { content:'  ↓'; }
+
+  @keyframes fd  { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:none} }
+  @keyframes fu  { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:none} }
+  @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+  /* ── SECTIONS ── */
+  .sec { padding:5.5rem 2rem; }
+  .inner { max-width:880px; margin:0 auto; }
+
+  .sec-lbl {
+    font-size:.75rem; letter-spacing:.2em; text-transform:uppercase;
+    font-weight:700; color:var(--g); margin-bottom:.6rem;
+    display:flex; align-items:center; gap:.7rem;
+  }
+  .sec-lbl::before { content:''; display:inline-block; width:22px; height:2px; background:var(--g); }
+
+  .sec h2 {
+    font-family:'Merriweather',serif;
+    font-size:clamp(1.8rem,4vw,2.8rem);
+    font-weight:700; color:var(--gd); line-height:1.22; margin-bottom:1.3rem;
+  }
+  .sec h2 em { font-style:italic; color:var(--g); }
+
+  .sec p { font-size:1.1rem; line-height:1.85; color:var(--mid); max-width:700px; margin-bottom:1rem; }
+  .sec p strong { color:var(--txt); }
+
+  .pullquote {
+    border-left:4px solid var(--g);
+    background:var(--gs);
+    border-radius:0 10px 10px 0;
+    padding:1.3rem 1.6rem; margin:2rem 0;
+    font-family:'Merriweather',serif;
+    font-size:1.1rem; font-style:italic;
+    color:var(--gd); line-height:1.7;
+  }
+
+  /* ── TIMELINE ── */
+  #tl { background:var(--gd); padding:5.5rem 2rem; }
+  #tl .sec-lbl { color:rgba(125,218,154,.8); }
+  #tl .sec-lbl::before { background:rgba(125,218,154,.8); }
+  #tl h2 { color:var(--w); }
+  #tl .sub { color:rgba(255,255,255,.5); font-size:1rem; margin-bottom:3rem; max-width:600px; }
+
+  .timeline { position:relative; max-width:840px; margin:0 auto; }
+  .timeline::before {
+    content:''; position:absolute; left:50%; top:0; bottom:0;
+    width:1px;
+    background:linear-gradient(to bottom,rgba(125,218,154,.5),rgba(125,218,154,.06));
+    transform:translateX(-50%);
+  }
+
+  .trow {
+    display:flex; justify-content:flex-end;
+    padding-right:calc(50% + 2.4rem);
+    margin-bottom:2.2rem; position:relative;
+    opacity:0; transform:translateX(-22px);
+    transition:opacity .6s ease,transform .6s ease;
+  }
+  .trow.r { justify-content:flex-start; padding-right:0; padding-left:calc(50% + 2.4rem); transform:translateX(22px); }
+  .trow.in { opacity:1; transform:none; }
+
+  .tdot {
+    position:absolute; left:50%; top:1.1rem;
+    width:12px; height:12px; border-radius:50%;
+    background:var(--gm); border:2px solid var(--gd);
+    box-shadow:0 0 0 3px rgba(125,218,154,.25);
+    transform:translateX(-50%); z-index:2;
+  }
+  .tdot.amb { background:var(--amb); box-shadow:0 0 0 3px rgba(230,126,34,.25); }
+  .tdot.red { background:var(--red); box-shadow:0 0 0 3px rgba(192,57,43,.25); }
+
+  .tcard {
+    background:rgba(255,255,255,.055);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:10px; padding:1.3rem 1.5rem; max-width:330px;
+    transition:background .25s,border-color .25s;
+  }
+  .tcard:hover { background:rgba(255,255,255,.09); border-color:rgba(125,218,154,.25); }
+  .tyr { font-family:'Merriweather',serif; font-size:1.45rem; font-weight:700; color:var(--gm); margin-bottom:.2rem; }
+  .tev { font-size:.95rem; font-weight:700; color:var(--w); margin-bottom:.45rem; }
+  .tds { font-size:.88rem; color:rgba(255,255,255,.58); line-height:1.65; }
+  .ttag {
+    display:inline-block; margin-top:.7rem;
+    font-size:.73rem; font-weight:700; padding:.2rem .65rem;
+    border-radius:20px; letter-spacing:.03em;
+  }
+  .tg { background:rgba(125,218,154,.13); color:var(--gm); border:1px solid rgba(125,218,154,.28); }
+  .ta { background:rgba(230,126,34,.12);  color:#f0a050;    border:1px solid rgba(230,126,34,.25); }
+  .tr { background:rgba(192,57,43,.12);   color:#e07060;    border:1px solid rgba(192,57,43,.25); }
+
+  /* ── VACUUM ── */
+  #vac { background:var(--gs); padding:5.5rem 2rem; }
+  .vgrid {
+    display:grid; grid-template-columns:1fr 40px 1fr;
+    gap:1rem; align-items:center;
+    max-width:780px; margin:2.5rem auto 0;
+  }
+  .vbox {
+    background:var(--w); border-radius:12px; padding:1.6rem;
+    box-shadow:0 3px 18px rgba(0,0,0,.07);
+    border-top:3px solid var(--g);
+    opacity:0; transform:translateY(14px);
+    transition:opacity .6s ease,transform .6s ease;
+  }
+  .vbox.in { opacity:1; transform:none; }
+  .vbox h4 { font-size:1rem; font-weight:700; color:var(--gd); margin-bottom:.5rem; }
+  .vbox p  { font-size:.95rem; color:var(--mid); line-height:1.65; }
+  .varrow { text-align:center; font-size:1.4rem; color:var(--g); opacity:0; transition:opacity .6s ease .3s; }
+  .varrow.in { opacity:1; }
+  .vgap {
+    grid-column:1/-1;
+    background:var(--yel); border:1.5px dashed var(--amb);
+    border-radius:10px; padding:1.4rem 1.6rem; margin-top:.5rem;
+    opacity:0; transition:opacity .6s ease .5s;
+  }
+  .vgap.in { opacity:1; }
+  .vgap h4 { font-size:1.05rem; font-weight:700; color:var(--yd); margin-bottom:.4rem; }
+  .vgap p  { font-size:.95rem; color:var(--yd); line-height:1.65; }
+
+  /* ── POWER BARS ── */
+  #pb { background:var(--w); padding:5.5rem 2rem; }
+  .pbchart { max-width:760px; margin:2.5rem auto 0; }
+  .pbera {
+    margin-bottom:1.8rem;
+    opacity:0; transition:opacity .6s ease;
+  }
+  .pbera.in { opacity:1; }
+  .pblbl { display:flex; justify-content:space-between; margin-bottom:.4rem; font-size:.9rem; }
+  .pblbl strong { color:var(--gd); }
+  .pblbl span   { color:var(--mid); }
+  .pbtrack { height:18px; background:#efefef; border-radius:3px; overflow:hidden; display:flex; }
+  .bf { height:100%; transition:width 1.2s cubic-bezier(.4,0,.2,1); }
+  .bfc { background:var(--g); }
+  .bfg { background:#3a6bbf; }
+  .bfv { background:var(--red); }
+  .pbleg {
+    display:flex; gap:1.5rem; flex-wrap:wrap;
+    margin-top:1.5rem; justify-content:center;
+    font-size:.875rem; color:var(--mid);
+  }
+  .pbleg span { display:flex; align-items:center; gap:.4rem; }
+  .ld { width:13px; height:13px; border-radius:2px; display:inline-block; }
+
+  /* ── PP SECTION ── */
+  #pp { background:var(--gs); padding:5.5rem 2rem; }
+  .ppgrid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:2rem; }
+  .ppbox {
+    background:var(--w); border-radius:10px; padding:1.6rem;
+    border-top:3px solid var(--g);
+    box-shadow:0 3px 16px rgba(0,0,0,.06);
+    font-size:1rem; line-height:1.75; color:var(--mid);
+  }
+  .ppbox h4 { font-size:1.05rem; font-weight:700; color:var(--gd); margin-bottom:.65rem; }
+  .ppbox ul { list-style:none; padding:0; }
+  .ppbox ul li { padding-left:1.1rem; position:relative; margin-bottom:.45rem; }
+  .ppbox ul li::before { content:'›'; color:var(--g); font-weight:700; position:absolute; left:0; }
+
+  /* ── CONCERNS ── */
+  #con { background:var(--gd); padding:5.5rem 2rem; }
+  #con .sec-lbl { color:rgba(125,218,154,.8); }
+  #con .sec-lbl::before { background:rgba(125,218,154,.8); }
+  #con h2 { color:var(--w); }
+  #con .sub { color:rgba(255,255,255,.5); font-size:1rem; margin-bottom:2.5rem; max-width:600px; }
+  .congrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(245px,1fr)); gap:1.25rem; max-width:940px; margin:0 auto; }
+  .ccard {
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(125,218,154,.13);
+    border-radius:13px; padding:1.6rem;
+    opacity:0; transform:translateY(16px);
+    transition:opacity .5s ease,transform .5s ease,border-color .3s;
+  }
+  .ccard:hover { border-color:rgba(125,218,154,.35); background:rgba(255,255,255,.08); }
+  .ccard.in { opacity:1; transform:none; }
+  .ccard h3 { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:var(--gm); margin-bottom:.65rem; }
+  .ccard p  { font-size:.95rem; line-height:1.75; color:rgba(255,255,255,.62); }
+  .cq {
+    margin-top:.9rem; padding-top:.9rem;
+    border-top:1px solid rgba(125,218,154,.12);
+    font-size:.85rem; color:rgba(125,218,154,.75); font-style:italic;
+  }
+
+  /* ── RAOOF ── */
+  #raoof { background:var(--off); padding:5.5rem 2rem; }
+  .rcard {
+    max-width:820px; margin:0 auto;
+    background:var(--w); border-radius:18px; padding:3rem;
+    box-shadow:0 6px 36px rgba(26,122,60,.1);
+    border-left:5px solid var(--g);
+    display:grid; grid-template-columns:1fr 1fr; gap:2.5rem;
+  }
+  .rcard h3 { font-family:'Merriweather',serif; font-size:1.4rem; color:var(--gd); margin-bottom:.75rem; }
+  .rcard p  { font-size:1rem; line-height:1.85; color:var(--mid); margin-bottom:.75rem; }
+  .rcard p em { font-style:italic; color:var(--gd); font-family:'Merriweather',serif; }
+  .rpri h4 {
+    font-size:.74rem; text-transform:uppercase; letter-spacing:.17em;
+    font-weight:700; color:var(--g); margin-bottom:.8rem;
+  }
+  .pi { display:flex; align-items:flex-start; gap:.55rem; margin-bottom:.6rem; font-size:.95rem; color:var(--txt); line-height:1.55; }
+  .pi::before { content:'›'; color:var(--g); font-weight:700; flex-shrink:0; margin-top:.05rem; }
+  .pi span { flex:1; }
+  .pi span a { color:var(--g); border-bottom:1.5px solid var(--gp); }
+  .pi span a:hover { color:var(--gd); border-bottom-color:var(--g); }
+
+  /* Hyperlinks — subtle green underline, consistent across all sections */
+  a { color:inherit; text-decoration:none; border-bottom:1.5px solid var(--g); padding-bottom:1px; transition:color .2s,border-color .2s; }
+  a:hover { color:var(--g); border-color:var(--gl); }
+  #tl a, #con a { color:var(--gm); border-bottom-color:rgba(125,218,154,.35); }
+  #tl a:hover, #con a:hover { color:var(--w); border-bottom-color:var(--gm); }
+  .rcard a { color:var(--g); border-bottom-color:var(--gp); }
+  .rcard a:hover { color:var(--gd); border-bottom-color:var(--g); }
+  .pi a { border-bottom-color:var(--gp); }
+  .pi a:hover { color:var(--g); }
+  footer a { color:rgba(255,255,255,.5); border-bottom-color:rgba(255,255,255,.2); }
+  footer a:hover { color:var(--gm); }
+
+  /* ── CTA — VOTE DOMINANT ── */
+  #cta { background:var(--g); padding:5.5rem 2rem; text-align:center; }
+  #cta h2 { font-family:'Merriweather',serif; font-size:clamp(1.8rem,4vw,3rem); color:var(--w); margin-bottom:1rem; }
+  #cta p  { font-size:1.1rem; color:rgba(255,255,255,.82); max-width:580px; margin:0 auto 2.5rem; line-height:1.8; }
+
+  /* VOTE box — primary, large */
+  .vote-primary {
+    max-width:480px; margin:0 auto 1.5rem;
+    background:var(--gd);
+    border-radius:16px; padding:2.2rem 2rem;
+    box-shadow:0 8px 32px rgba(0,0,0,.2);
+  }
+  .vote-primary .vp-lbl { font-size:.75rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gm); margin-bottom:.4rem; font-weight:700; }
+  .vote-primary .vp-name { font-family:'Merriweather',serif; font-size:2rem; font-weight:700; color:var(--w); margin-bottom:.4rem; }
+  .vote-primary .vp-date { font-size:1.35rem; font-weight:700; color:var(--gm); margin-bottom:.3rem; }
+  .vote-primary .vp-note { font-size:.9rem; color:rgba(255,255,255,.6); }
+
+  /* GMC secondary */
+  .gmc-secondary {
+    max-width:480px; margin:0 auto;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:12px; padding:1.2rem 1.6rem;
+    display:flex; align-items:center; justify-content:space-between; gap:1rem;
+    flex-wrap:wrap;
+  }
+  .gmc-secondary .gs-lbl { font-size:.8rem; color:rgba(255,255,255,.65); }
+  .gmc-secondary .gs-date { font-size:.95rem; font-weight:700; color:rgba(255,255,255,.9); }
+  .gmc-secondary .gs-link { font-size:.78rem; color:rgba(255,255,255,.5); }
+
+  .final-tag {
+    margin-top:2.8rem; font-size:.78rem;
+    letter-spacing:.1em; text-transform:uppercase;
+    color:rgba(255,255,255,.45); font-weight:600;
+  }
+
+  footer {
+    background:var(--gd); padding:2rem; text-align:center;
+    font-size:.78rem; color:rgba(255,255,255,.3); line-height:1.9;
+  }
+
+  @media(max-width:640px){
+    .timeline::before { left:1rem; }
+    .trow,.trow.r { padding-left:3.2rem; padding-right:0; justify-content:flex-start; transform:none; }
+    .tdot { left:1rem; }
+    .tcard { max-width:100%; }
+    .vgrid { grid-template-columns:1fr; }
+    .varrow { display:none; }
+    .rcard  { grid-template-columns:1fr; gap:1.5rem; }
+    .ppgrid { grid-template-columns:1fr; }
+    .gmc-secondary { flex-direction:column; text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<nav id="ndots">
+  <div class="nd on" data-s="hero"></div>
+  <div class="nd" data-s="context"></div>
+  <div class="nd" data-s="tl"></div>
+  <div class="nd" data-s="vac"></div>
+  <div class="nd" data-s="pb"></div>
+  <div class="nd" data-s="pp"></div>
+  <div class="nd" data-s="con"></div>
+  <div class="nd" data-s="raoof"></div>
+  <div class="nd" data-s="cta"></div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-chip">RCPsych Dean Elections 2026 &nbsp;·&nbsp; Voting: 27 May – 10 June 2026</div>
+  <h1>If no independent body is accountable for training standards,<br><em>who protects the patient?</em></h1>
+  <p class="hero-strap">As Health Education England was absorbed into NHS England, and NHS England into DHSC, the body specifically mandated to provide independent educational quality oversight has disappeared. The draft GMC Order 2026 consultation — closing 23 June — is the opportunity to address this.</p>
+  <div class="hero-byline">
+    <div class="hb-name">Dr Raoof &mdash; Candidate for Dean, Education, Training, Workforce &amp; Research</div>
+    <div class="hb-role">Royal College of Psychiatrists &nbsp;·&nbsp; Stability and Change</div>
+  </div>
+  <div class="scroll-cue">Scroll to explore</div>
+</section>
+
+<!-- CONTEXT -->
+<section class="sec" id="context" style="background:var(--w)">
+  <div class="inner">
+    <div class="rev">
+      <div class="sec-lbl">Our Foundation</div>
+      <h2>A century of purpose, <em>not privilege.</em></h2>
+    </div>
+    <div class="rev">
+      <p>In 1841, a group of doctors working in asylums came together not to advance their professional standing, but because <strong>patients with mental illness had no independent voice</strong> advocating for the quality of their care. That founding purpose has shaped the Royal College of Psychiatrists ever since.</p>
+      <p>In 1926 the College received its Royal Charter as the Royal Medico-Psychological Association. In 1971, a Supplemental Charter formally established the Royal College of Psychiatrists. Through every era, the College's three founding aims have remained constant: teaching, research, and public education — all in service of patients.</p>
+    </div>
+    <div class="pullquote rev">
+      "The case for maintaining a strong College voice in the draft GMC Order 2026 is not about institutional self-interest. It is about ensuring that an independent, expert, non-governmental body remains accountable for the quality and safety of psychiatric training."
+    </div>
+    <div class="rev">
+      <p>That is what is at stake in the consultation on the draft GMC Order 2026 and the NHS 10-Year Plan's proposals for postgraduate training. This is a question of patient safety architecture, not professional territory.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="tl">
+  <div class="inner" style="text-align:center;margin-bottom:0">
+    <div class="rev">
+      <div class="sec-lbl" style="justify-content:center">Historical context</div>
+      <h2>How independent oversight of<br>medical education has evolved</h2>
+      <p class="sub">A progressive shift in where accountability for training quality has resided — and what has been lost along the way.</p>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="trow rev"><div class="tdot"></div><div class="tcard"><div class="tyr">1518–1841</div><div class="tev">Royal Colleges as sole quality body</div><p class="tds">Before any national regulator, the royal colleges were the only organisations setting, examining, and enforcing standards in medicine. Their authority was wholly independent of government or employers.</p><span class="ttag tg">Independent professional authority</span></div></div>
+    <div class="trow r rev"><div class="tdot"></div><div class="tcard"><div class="tyr">1841</div><div class="tev">RCPsych founded (as AMOA)</div><p class="tds">Psychiatry's founding body established to raise standards for patients in asylums — a patient safety mission from the outset. Royal Charter received 1926; College formally established 1971.</p><span class="ttag tg">Patient safety mission from day one</span></div></div>
+    <div class="trow rev"><div class="tdot"></div><div class="tcard"><div class="tyr">1858</div><div class="tev">GMC created — co-governance model</div><p class="tds">A national regulator forms, but 18 of its 24 founding council members come directly from the royal colleges. Colleges shape the GMC from within — co-governance rather than displacement.</p><span class="ttag tg">Colleges: co-governors of standards</span></div></div>
+    <div class="trow r rev"><div class="tdot"></div><div class="tcard"><div class="tyr">1948–2003</div><div class="tev">NHS era — colleges anchor specialist training</div><p class="tds">Colleges develop postgraduate training pathways, fellowship examinations (MRCPsych, MRCP, FRCS), and training post inspections. They remain the primary independent quality body for specialist education.</p><span class="ttag tg">Primary independent quality guardians</span></div></div>
+    <div class="trow rev"><div class="tdot amb"></div><div class="tcard"><div class="tyr">2003</div><div class="tev">PMETB — first transfer of formal authority</div><p class="tds">A government body (PMETB) takes formal oversight of postgraduate curricula. Colleges retain design and examination roles but lose regulatory equality. Independent professional oversight begins to be mediated through government-appointed structures.</p><span class="ttag ta">Independent space: first reduction</span></div></div>
+    <div class="trow r rev"><div class="tdot red"></div><div class="tcard"><div class="tyr">2010</div><div class="tev">PMETB merges into GMC</div><p class="tds">GMC absorbs all postgraduate education oversight. Colleges become approved curriculum providers — designing within GMC-set frameworks rather than setting the framework. Application of standards formally leaves the profession.</p><span class="ttag tr">Colleges: approved providers only</span></div></div>
+    <div class="trow rev"><div class="tdot red"></div><div class="tcard"><div class="tyr">2012–2023</div><div class="tev">HEE → NHSE → DHSC consolidation</div><p class="tds">Health Education England absorbed into NHS England. Education functions progressively consolidated into DHSC structures. The body specifically created to hold independent responsibility for education quality is absorbed into the machinery of government and employer priorities.</p><span class="ttag tr">Independent education oversight: vacuum created</span></div></div>
+    <div class="trow r rev"><div class="tdot red"></div><div class="tcard"><div class="tyr">2025–2026</div><div class="tev">NHS 10-Year Plan &amp; draft GMC Order 2026</div><p class="tds">Portfolio Pathway (formerly CESR) proposed as expanded default route. CCT no longer the primary pathway. Formal college examinations de-emphasised. Modular, competency-based progression proposed. Alternative non-college providers introduced. The draft GMC Order 2026 must clarify and protect the college's role in this new landscape.</p><span class="ttag tr">College role in new framework: undefined</span></div></div>
+  </div>
+</section>
+
+<!-- VACUUM -->
+<section class="sec" id="vac" style="background:var(--gs)">
+  <div class="inner">
+    <div class="rev">
+      <div class="sec-lbl">The core challenge</div>
+      <h2>A structural gap in <em>independent oversight.</em></h2>
+      <p>Government and NHS employers have legitimate priorities — workforce numbers, service delivery, throughput. These are necessary functions. But they are not the same as educational quality. When the body specifically tasked with independent educational oversight is absorbed into government structures, a critical function is lost — even when no displacement was intended.</p>
+      <p><strong>The question is not who holds power, but who is independently accountable for the standard.</strong> Royal Colleges hold no government accountability and no employer interest. Their charter duty is to standards and public education. In the current landscape, they are among the few remaining institutions able to fulfil this function.</p>
+    </div>
+    <div class="vgrid">
+      <div class="vbox rev" style="transition-delay:.1s"><h4>Government / DHSC</h4><p>Accountable for NHS performance, throughput, workforce numbers, and political delivery. These are legitimate and necessary goals — but they are distinct from independent educational quality assurance.</p></div>
+      <div class="varrow rev">⟷</div>
+      <div class="vbox rev" style="transition-delay:.2s"><h4>NHS Employers</h4><p>Accountable for service delivery and filling posts. Equally legitimate — but the natural pressure is towards training completion and workforce availability rather than the depth and rigour of specialist formation.</p></div>
+      <div class="vgap rev"><h4>⚠ Who speaks independently for quality and patient safety?</h4><p>As HEE was absorbed into NHSE, and NHSE into DHSC, the independent mandate for educational quality has been lost. Royal Colleges — with charter-based duties to standards, teaching and public education — are now among the few remaining institutions able to fill this function. The draft GMC Order 2026 must formalise and protect this role.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- POWER BARS -->
+<section class="sec" id="pb" style="background:var(--w)">
+  <div class="inner">
+    <div class="rev">
+      <div class="sec-lbl">The shifting balance</div>
+      <h2>Where independent oversight has resided — <em>and where it is headed.</em></h2>
+      <p>An illustrative representation of the qualitative shift in authority over postgraduate medical education standards across five eras.</p>
+    </div>
+    <div class="pbchart">
+      <div class="pbera rev"><div class="pblbl"><strong>Pre-1858 — Colleges era</strong><span>Near-total independent authority</span></div><div class="pbtrack"><div class="bf bfc" style="width:0" data-w="93%"></div><div class="bf bfg" style="width:0" data-w="0%"></div><div class="bf bfv" style="width:0" data-w="0%"></div></div></div>
+      <div class="pbera rev"><div class="pblbl"><strong>1858–1948 — Co-governance era</strong><span>Colleges shape GMC from within</span></div><div class="pbtrack"><div class="bf bfc" style="width:0" data-w="65%"></div><div class="bf bfg" style="width:0" data-w="30%"></div><div class="bf bfv" style="width:0" data-w="0%"></div></div></div>
+      <div class="pbera rev"><div class="pblbl"><strong>1948–2003 — NHS specialist era</strong><span>Colleges dominant in postgraduate space</span></div><div class="pbtrack"><div class="bf bfc" style="width:0" data-w="56%"></div><div class="bf bfg" style="width:0" data-w="26%"></div><div class="bf bfv" style="width:0" data-w="12%"></div></div></div>
+      <div class="pbera rev"><div class="pblbl"><strong>2003–2010 — PMETB era</strong><span>First significant reduction in independent college authority</span></div><div class="pbtrack"><div class="bf bfc" style="width:0" data-w="38%"></div><div class="bf bfg" style="width:0" data-w="36%"></div><div class="bf bfv" style="width:0" data-w="20%"></div></div></div>
+      <div class="pbera rev"><div class="pblbl"><strong>2010–2023 — Post-merger + HEE absorbed</strong><span>Colleges as approved providers; independent education body disappears</span></div><div class="pbtrack"><div class="bf bfc" style="width:0" data-w="22%"></div><div class="bf bfg" style="width:0" data-w="42%"></div><div class="bf bfv" style="width:0" data-w="32%"></div></div></div>
+      <div class="pbera rev"><div class="pblbl"><strong style="color:var(--red)">2026 proposed — if colleges not protected in draft GMC Order</strong><span style="color:var(--red)">Independent quality voice at serious risk</span></div><div class="pbtrack"><div class="bf bfc" style="width:0" data-w="12%"></div><div class="bf bfg" style="width:0" data-w="40%"></div><div class="bf bfv" style="width:0" data-w="44%"></div></div></div>
+      <div class="pbleg">
+        <span><div class="ld" style="background:var(--g)"></div>Royal Colleges (independent professional authority)</span>
+        <span><div class="ld" style="background:#3a6bbf"></div>GMC / national regulator</span>
+        <span><div class="ld" style="background:var(--red)"></div>Government / NHS England / DHSC</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO PATHWAY -->
+<section class="sec" id="pp" style="background:var(--gs)">
+  <div class="inner">
+    <div class="rev">
+      <div class="sec-lbl">Supporting the Portfolio Pathway</div>
+      <h2>Flexibility and rigour <em>are not in conflict.</em></h2>
+      <p>Since November 2023, the Portfolio Pathway (formerly CESR) has replaced equivalence-based assessment with demonstration of Knowledge, Skills and Experience (KSE). This is a welcome development, particularly for SAS and Locally Employed Doctors who have historically lacked a structured, supported route to specialist registration.</p>
+      <p>RCPsych should be a champion of the Portfolio Pathway — but championing it means ensuring it is delivered with the same rigour and college-led quality assurance as the CCT route. Expansion of access is only meaningful if the standard is maintained.</p>
+    </div>
+    <div class="ppgrid rev">
+      <div class="ppbox"><h4>The proposal: a structured online portfolio for SAS and LED doctors</h4><ul><li>Develop a dedicated, accessible online portfolio platform for SAS and Locally Employed Doctors — mirroring what exists for Resident Doctors</li><li>Structured guidance mapped to the Portfolio Pathway KSE framework for psychiatry</li><li>Supported progression with clear milestones and college-led assessment</li><li>Equity of access and equity of standard — both matter equally</li></ul></div>
+      <div class="ppbox"><h4>Why college leadership of the Portfolio Pathway matters</h4><ul><li>Consistency of standard across all routes to specialist registration in psychiatry</li><li>Independent quality assurance not subject to workforce or service pressures</li><li>Expert assessment with the clinical depth to evaluate psychiatric KSE meaningfully</li><li>A pathway that supports genuine career development, not box-ticking</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCERNS -->
+<section id="con">
+  <div class="inner" style="text-align:center;margin-bottom:0">
+    <div class="rev">
+      <div class="sec-lbl" style="justify-content:center">The consultation</div>
+      <h2>What the profession should raise</h2>
+      <p class="sub">Key questions for the draft GMC Order 2026 — framed around patient safety and educational quality.</p>
+    </div>
+  </div>
+  <div class="congrid" style="margin-top:2rem">
+    <div class="ccard rev"><h3>Who is independently accountable for the standard?</h3><p>If formal college examinations are de-emphasised and the Portfolio Pathway expands as the default route, what independent mechanism assures the public that a specialist doctor has reached the required standard?</p><div class="cq">The draft Order must name the body independently accountable for this assurance.</div></div>
+    <div class="ccard rev"><h3>Portfolio Pathway governance at scale</h3><p>The Portfolio Pathway is a necessary and welcome route for SAS, LED, and internationally trained doctors. As it expands, a college-led quality framework must accompany it. Flexibility and rigour must coexist.</p><div class="cq">The consultation must define the quality assurance framework for PP at scale.</div></div>
+    <div class="ccard rev"><h3>Separating education from service pressure</h3><p>With DHSC now holding education policy alongside NHS delivery, the principle that training standards cannot be compromised to fill workforce gaps must be actively protected.</p><div class="cq">The draft Order must enshrine the independence of educational quality from service delivery targets.</div></div>
+    <div class="ccard rev"><h3>Formal college voice in the new framework</h3><p>The college's formal statutory voice within the GMC has diminished progressively since 1858. The draft GMC Order 2026 must not reduce it further — it should formalise a mechanism by which independent professional expertise shapes regulatory decisions on education standards.</p><div class="cq">A statutory consultation requirement with colleges on all education standards decisions should be written into the Order.</div></div>
+    <div class="ccard rev"><h3>Oversight of alternative training providers</h3><p>The NHS 10-Year Plan introduces alternative training providers outside the traditional college and deanery structure. A clear inspection and accreditation framework, led by colleges with the relevant clinical expertise, must be a condition of their approval.</p><div class="cq">Who will inspect, accredit, and hold these providers to account?</div></div>
+    <div class="ccard rev"><h3>Equity that does not compromise safety</h3><p>Broadening access to specialist registration for SAS, LED, and internationally trained doctors is the right objective. But equity of access must not come at the cost of equity of standard — both are patient safety issues requiring college-led quality assurance.</p><div class="cq">How will consistency of standard be maintained as routes diversify?</div></div>
+  </div>
+</section>
+
+<!-- RAOOF -->
+<section class="sec" id="raoof" style="background:var(--off)">
+  <div class="inner" style="text-align:center;margin-bottom:2.2rem">
+    <div class="rev">
+      <div class="sec-lbl" style="justify-content:center">Raoof for Dean · RCPsych 2026</div>
+      <h2>Experienced leadership <em>for a critical moment.</em></h2>
+    </div>
+  </div>
+  <div class="rcard rev">
+    <div>
+      <h3>Why these reforms matter to me</h3>
+      <p>I bring over 30 years of NHS experience, rooted in frontline clinical work as a trainee, SAS and consultant psychiatrist. I have also served in a wide range of educational leadership roles, including SAS Tutor, Clinical Tutor, Director of Medical Education, and Vice Chair of the Mental Health Act Approval Panel (NHS Midlands and East).</p>
+      <p>Within the College, I have contributed extensively through committees and by leading major programmes, including the <a href="https://www.rcpsych.ac.uk/events/about-congress" target="_blank" rel="noopener">International Congress</a>, <a href="https://www.rcpsych.ac.uk/events/conferences/s12ACtraining" target="_blank" rel="noopener">Mental Health Act approval courses</a>, <a href="https://www.rcpsych.ac.uk/events/conferences/clinical-and-educational-supervisors-training-course" target="_blank" rel="noopener">supervisor training</a>, and the <a href="https://www.hee.nhs.uk/our-work/autism/current-projects/national-autism-training-programme-psychiatrists" target="_blank" rel="noopener">National Autism Training Programme for Psychiatrists (NATPP)</a> — supported by Faculties, Divisions and incredible colleagues.</p>
+      <p>As Associate Dean, I led the establishment of <a href="https://www.rcpsych.ac.uk/training/rcpsych-learn" target="_blank" rel="noopener">RCPsych Learn</a> and oversee a significant proportion of the College's educational delivery, including Certificate and Diploma courses and <a href="https://www.rcpsych.ac.uk/training/exams" target="_blank" rel="noopener">MRCPsych eLearning</a>. I am currently leading the <a href="https://www.rcpsych.ac.uk/improving-care/mpac-review" target="_blank" rel="noopener">MPAC Review</a> and the <a href="https://www.rcpsych.ac.uk/events/about-congress" target="_blank" rel="noopener">International Congress</a>.</p>
+      <p>I sit on the <a href="https://www.cambridge.org/core/journals/bjpsych-advances/information/about-this-journal/editorial-board" target="_blank" rel="noopener">BJPsych Advances Editorial Board</a> and the College's Digital Strategy Group.</p>
+      <p>This is a particularly challenging time for our profession. Workforce shortages, service pressures, NHS reform, evolving regulatory structures — including the <a href="https://www.gov.uk/government/consultations/reforming-the-general-medical-council-legislative-framework" target="_blank" rel="noopener">draft GMC Order 2026</a> and the <a href="https://www.england.nhs.uk/long-read/the-medical-training-review-phase-1-diagnostic-report/" target="_blank" rel="noopener">Medical Training Review</a> — and increasing divergence among the devolved nations all raise real concerns about who will continue to uphold standards should training systems change. In this context, the College's role as a trusted, independent voice becomes even more critical.</p>
+      <p>We must also engage robustly with <a href="https://bills.parliament.uk/bills/3884/publications" target="_blank" rel="noopener">Mental Health Act training and implementation</a>, and foster international collaboration and bidirectional learning.</p>
+      <p><em>"I have always believed the College should feel like a professional home — a community that stands alongside us and supports us at every stage of our careers to do our best for our patients."</em></p>
+      <p><em>"The Dean's role is not just about training, curricula and examinations, but about ensuring that sense of belonging, development and support throughout our professional lives."</em></p>
+      <p><em>"Supporting Colleagues. Safeguarding Standards in Uncertain, Changing Times."</em></p>
+    </div>
+    <div class="rpri">
+      <h4>Key priorities as Dean</h4>
+      <div class="pi"><span>Safeguard standards in service, training and assessment — and lead RCPsych's response to the <a href="https://www.gov.uk/government/consultations/reforming-the-general-medical-council-legislative-framework" target="_blank" rel="noopener">draft GMC Order 2026</a></span></div>
+      <div class="pi"><span>Develop a structured, accessible online Portfolio Pathway for SAS and Locally Employed Doctors — ensuring equity of access and equity of standard</span></div>
+      <div class="pi"><span>Structured, equitable support for SAS, Locally Employed and Resident Doctors at all career stages, not only during training but as a lifelong professional partner</span></div>
+      <div class="pi"><span>Ensure <a href="https://www.rcpsych.ac.uk/training/exams" target="_blank" rel="noopener">MRCPsych examinations</a> and recruitment processes are fair, forward-looking, and fit for purpose</span></div>
+      <div class="pi"><span>Robust engagement with policymakers on the <a href="https://www.england.nhs.uk/long-read/the-medical-training-review-phase-1-diagnostic-report/" target="_blank" rel="noopener">Medical Training Review</a>, GMC reforms, and <a href="https://bills.parliament.uk/bills/3884/publications" target="_blank" rel="noopener">Mental Health Act training</a></span></div>
+      <div class="pi"><span>High-quality, accessible CPD for colleagues in all grades and settings via <a href="https://www.rcpsych.ac.uk/training/rcpsych-learn" target="_blank" rel="noopener">RCPsych Learn</a> and beyond</span></div>
+      <div class="pi"><span>Implementation of the College's Academic Strategy — promoting a research-active culture and evidence-based practice</span></div>
+      <div class="pi"><span>Foster international collaboration and bidirectional learning via the <a href="https://www.rcpsych.ac.uk/events/about-congress" target="_blank" rel="noopener">International Congress</a> and global partnerships</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA — VOTE DOMINANT -->
+<section id="cta">
+  <div class="rev">
+    <h2>Your vote. Our future.</h2>
+    <p>The RCPsych Dean election is open now. Vote for the leadership you want for the College — and for the independent voice that matters for our patients and our profession.</p>
+
+    <!-- VOTE — PRIMARY, DOMINANT -->
+    <div class="vote-primary">
+      <div class="vp-lbl">RCPsych Dean Election 2026</div>
+      <div class="vp-name">Vote Raoof</div>
+      <div class="vp-date">27 May – 10 June 2026</div>
+    </div>
+
+    <!-- GMC — SECONDARY -->
+    <div class="gmc-secondary">
+      <div>
+        <div class="gs-lbl">Also — respond to the draft GMC Order 2026 consultation</div>
+        <div class="gs-date">Closes 23 June 2026</div>
+      </div>
+      <div class="gs-link">gov.uk/gmc-consultation</div>
+    </div>
+
+    <div class="final-tag">Supporting Colleagues &nbsp;·&nbsp; Safeguarding Standards in Uncertain, Changing Times</div>
+  </div>
+</section>
+
+<footer>
+  <p>
+    <a href="https://www.gov.uk/government/consultations/reforming-the-general-medical-council-legislative-framework" target="_blank" rel="noopener">Draft GMC Order 2026 Consultation</a> (DHSC, March 2026) &nbsp;·&nbsp;
+    <a href="https://www.england.nhs.uk/long-read/the-medical-training-review-phase-1-diagnostic-report/" target="_blank" rel="noopener">Medical Training Review</a> (October 2025) &nbsp;·&nbsp;
+    NHS England 10-Year Health Plan (July 2025)
+  </p>
+  <p>
+    <a href="https://www.gmc-uk.org/registration-and-licensing/join-our-registers/applying-for-specialist-or-gp-registration" target="_blank" rel="noopener">Portfolio Pathway guidance: GMC</a> (November 2023) &nbsp;·&nbsp;
+    <a href="https://www.aomrc.org.uk" target="_blank" rel="noopener">Academy of Medical Royal Colleges</a> &nbsp;·&nbsp;
+    <a href="https://www.rcpsych.ac.uk/about-us/history--art-and-exhibitions/history" target="_blank" rel="noopener">Royal College of Psychiatrists history 1841–1971</a>
+  </p>
+  <p style="margin-top:.75rem;opacity:.35;font-size:.72rem">Power balance data is illustrative of qualitative shifts in regulatory authority. For educational and advocacy purposes.</p>
+</footer>
+
+<script>
+  window.addEventListener('scroll',()=>{
+    const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+    document.getElementById('prog').style.width=pct+'%';
+    const ids=['hero','context','tl','vac','pb','pp','con','raoof','cta'];
+    document.querySelectorAll('.nd').forEach((d,i)=>{
+      const el=document.getElementById(ids[i]);
+      if(!el)return;
+      const r=el.getBoundingClientRect();
+      if(r.top<=window.innerHeight/2&&r.bottom>=window.innerHeight/2){
+        document.querySelectorAll('.nd').forEach(x=>x.classList.remove('on'));
+        d.classList.add('on');
+      }
+    });
+  });
+  document.querySelectorAll('.nd').forEach((d,i)=>{
+    const ids=['hero','context','tl','vac','pb','pp','con','raoof','cta'];
+    d.addEventListener('click',()=>document.getElementById(ids[i])?.scrollIntoView({behavior:'smooth'}));
+  });
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting)return;
+      e.target.classList.add('in');
+      e.target.querySelectorAll('.bf').forEach(b=>{
+        setTimeout(()=>{b.style.width=b.dataset.w||'0%';},150);
+      });
+    });
+  },{threshold:.15});
+  document.querySelectorAll('.rev,.trow,.pbera,.ccard,.vbox,.varrow,.vgap').forEach(el=>obs.observe(el));
+  document.querySelectorAll('.ccard').forEach((c,i)=>{c.style.transitionDelay=(i*.07)+'s';});
+  document.querySelectorAll('.trow').forEach((t,i)=>{t.style.transitionDelay=(i*.08)+'s';});
+  document.querySelectorAll('.pbera').forEach((p,i)=>{p.style.transitionDelay=(i*.1)+'s';});
+</script>
+</body>
+</html>
